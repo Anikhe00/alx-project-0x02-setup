@@ -1,12 +1,41 @@
+// pages/home.tsx
+import React, { useState } from "react";
+import PostModal from "@/components/common/PostModal";
 import Card from "@/components/common/Card";
+import { type Post } from "@/interfaces";
 
-const Home: React.FC = () => {
+const HomePage: React.FC = () => {
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+
+  const handleAddPost = (post: Post) => {
+    setPosts((prev) => [...prev, post]);
+  };
+
   return (
-    <div>
-      <h1>Home Section</h1>
-      <Card title="Home Card" content="This is the home card content." />
+    <div className="p-6">
+      <h1 className="text-3xl font-bold mb-4">Welcome to the Home Page</h1>
+
+      <button
+        onClick={() => setIsModalOpen(true)}
+        className="mb-4 px-4 py-2 bg-purple-600 text-white rounded-md"
+      >
+        + Add Post
+      </button>
+
+      <div className="space-y-4">
+        {posts.map((post, index) => (
+          <Card key={index} title={post.title} content={post.content} />
+        ))}
+      </div>
+
+      <PostModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onAddPost={handleAddPost}
+      />
     </div>
   );
 };
 
-export default Home;
+export default HomePage;
